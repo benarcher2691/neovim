@@ -1977,6 +1977,13 @@ describe('API', function()
       ]])
       eq(false, api.nvim_get_option_value('modified', {}))
     end)
+
+    it('tty options #31860', function()
+      -- 'term' is a special option not in the regular option table (read-only)
+      eq('string', type(api.nvim_get_option_value('term', {})))
+      -- Setting 'term' should fail
+      eq("Unknown option 'term'", pcall_err(api.nvim_set_option_value, 'term', 'foo', {}))
+    end)
   end)
 
   describe('nvim_{get,set}_current_buf, nvim_list_bufs', function()
